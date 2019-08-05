@@ -40,7 +40,6 @@ public class DealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deal);
-        FirebaseUtil.openFbReference("traveldeals", this);
         eFirebaseDatabase = FirebaseUtil.sFirebaseDatabase;
         eDatabaseReference = FirebaseUtil.sDatabaseReference;
         txtTitle = findViewById(R.id.txtTitle);
@@ -162,6 +161,7 @@ public class DealActivity extends AppCompatActivity {
         menu.findItem(R.id.delete_menu).setVisible(FirebaseUtil.isAdmin);
         menu.findItem(R.id.save_menu).setVisible(FirebaseUtil.isAdmin);
         enableEditTexts(FirebaseUtil.isAdmin);
+        findViewById(R.id.btnImage).setEnabled(FirebaseUtil.isAdmin);
         return true;
     }
 
@@ -174,12 +174,7 @@ public class DealActivity extends AppCompatActivity {
     private void showImage(String url) {
         if (url != null && !url.isEmpty()) {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-//            Picasso.get().load(url).resize(width, width * 2 / 3).centerCrop().into(eImageView);
-            Picasso.get()
-                    .load(url)
-                    .resize(width, width * 2 / 3)
-                    .centerCrop()
-                    .into(eImageView);
+            Picasso.get().load(url).resize(width, width * 2 / 3).centerCrop().into(eImageView);
         }
     }
 }

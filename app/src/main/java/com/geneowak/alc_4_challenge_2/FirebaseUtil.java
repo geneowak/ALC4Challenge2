@@ -1,7 +1,5 @@
 package com.geneowak.alc_4_challenge_2;
 
-import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,14 +32,13 @@ public class FirebaseUtil {
     public static FirebaseAuth.AuthStateListener sAuthStateListener;
     public static boolean isAdmin;
     private static FirebaseUtil firebaseUtil;
-    private static Activity caller;
-
-    private static final int RC_SIGN_IN = 10001;
+    private static final int RC_SIGN_IN = 123;
+    private static ListActivity caller;
 
     private FirebaseUtil() {
     }
 
-    public static void openFbReference(String ref, final Activity callerActivity) {
+    public static void openFbReference(String ref, final ListActivity callerActivity) {
         if (firebaseUtil == null) {
             firebaseUtil = new FirebaseUtil();
             sFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -72,7 +69,7 @@ public class FirebaseUtil {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 FirebaseUtil.isAdmin = true;
-                Log.d("Admin", "You're an admin");
+                caller.showMenu();
             }
 
             @Override
@@ -108,6 +105,7 @@ public class FirebaseUtil {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
     }

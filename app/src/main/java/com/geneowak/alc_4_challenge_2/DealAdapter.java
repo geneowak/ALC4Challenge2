@@ -1,6 +1,5 @@
 package com.geneowak.alc_4_challenge_2;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -33,11 +32,10 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
     private ChildEventListener eChildListener;
     private ImageView eImageDeal;
 
-    public DealAdapter(Activity callerActivity) {
-        FirebaseUtil.openFbReference("traveldeals", callerActivity);
+    public DealAdapter() {
         eFirebaseDatabase = FirebaseUtil.sFirebaseDatabase;
         eDatabaseReference = FirebaseUtil.sDatabaseReference;
-        eDeals = FirebaseUtil.sDeals;
+        this.eDeals = FirebaseUtil.sDeals;
         eChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
