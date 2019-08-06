@@ -1,5 +1,6 @@
 package com.geneowak.alc_4_challenge_2;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,7 @@ public class FirebaseUtil {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 FirebaseUtil.isAdmin = true;
+                Log.d("Admin", "You are an admin.");
                 caller.showMenu();
             }
 
@@ -105,7 +107,6 @@ public class FirebaseUtil {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false)
                         .build(),
                 RC_SIGN_IN);
     }

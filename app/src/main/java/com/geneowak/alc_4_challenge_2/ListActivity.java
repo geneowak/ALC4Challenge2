@@ -40,7 +40,13 @@ public class ListActivity extends AppCompatActivity {
         MenuItem insertMenu = menu.findItem(R.id.insert_menu);
         // only enable menu for admins
         Log.d("Admin status: ", "Admin:" + FirebaseUtil.isAdmin);
-        insertMenu.setVisible(FirebaseUtil.isAdmin);
+//        insertMenu.setVisible(FirebaseUtil.isAdmin);
+        if (FirebaseUtil.isAdmin) {
+            insertMenu.setVisible(true);
+        } else {
+            insertMenu.setVisible(false);
+        }
+
         return true;
     }
 
@@ -54,6 +60,7 @@ public class ListActivity extends AppCompatActivity {
         LinearLayoutManager dealsLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.attachListener();
+        showMenu();
     }
 
     public void showMenu() {
@@ -84,8 +91,7 @@ public class ListActivity extends AppCompatActivity {
                         });
                 FirebaseUtil.detachListener();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 }

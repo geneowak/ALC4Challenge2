@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.geneowak.alc_4_challenge_2"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -28,16 +28,16 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     implementation 'com.google.firebase:firebase-auth:17.0.0'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-
     implementation 'com.firebaseui:firebase-ui-database:5.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.firebaseui:firebase-ui-storage:5.0.0'
-    
+
     implementation('com.squareup.picasso:picasso:2.71828') {
         exclude group: 'com.android.support'
         exclude module: ['exifinterface', 'support-annotations']
     }
+
+    implementation("com.squareup.okhttp3:okhttp:4.0.1")
 }
 
 apply plugin: 'com.google.gms.google-services'

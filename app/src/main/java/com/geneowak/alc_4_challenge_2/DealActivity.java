@@ -48,10 +48,11 @@ public class DealActivity extends AppCompatActivity {
         eImageView = findViewById(R.id.image);
 
         Intent intent = getIntent();
-        eDeal = (TravelDeal) intent.getSerializableExtra("Deal");
-        if (eDeal == null) {
-            eDeal = new TravelDeal();
+        TravelDeal deal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if (deal == null) {
+            deal = new TravelDeal();
         }
+        this.eDeal = deal;
         txtTitle.setText(eDeal.getTitle());
         txtDescription.setText(eDeal.getDescription());
         txtPrice.setText(eDeal.getPrice());
@@ -77,12 +78,17 @@ public class DealActivity extends AppCompatActivity {
             ref.putFile(imageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String url = ref.getDownloadUrl().toString();
-                    String picName = taskSnapshot.getMetadata().getReference().getPath();
+                    while (!ref.getDownloadUrl().isComplete()) ;
+                    String url = ref.getDownloadUrl().getResult().toString();
+//                    String url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    String picName = taskSnapshot.getStorage().getPath();
                     eDeal.setImageUrl(url);
                     eDeal.setImageName(picName);
                     Log.d("url: ", url);
                     Log.d("Name", picName);
+                    Log.d("Metta: ", taskSnapshot.getMetadata().getPath());
+                    Log.d("Metta: ", taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                    Log.d("Metta: ", ref.getDownloadUrl().getResult().toString());
                     showImage(url);
                 }
             });
@@ -95,8 +101,8 @@ public class DealActivity extends AppCompatActivity {
             case R.id.save_menu:
                 saveDeal();
                 Toast.makeText(this, "Deal saved", Toast.LENGTH_LONG).show();
-                clean();
                 backToList();
+                clean();
                 return true;
             case R.id.delete_menu:
                 deleteDeal();
@@ -117,7 +123,6 @@ public class DealActivity extends AppCompatActivity {
         eDeal.setTitle(txtTitle.getText().toString());
         eDeal.setDescription(txtDescription.getText().toString());
         eDeal.setPrice(txtPrice.getText().toString());
-
         if (eDeal.getId() == null) {
             eDatabaseReference.push().setValue(eDeal);
         } else {
@@ -158,10 +163,19 @@ public class DealActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
         // enable edit menus only for admins
-        menu.findItem(R.id.delete_menu).setVisible(FirebaseUtil.isAdmin);
-        menu.findItem(R.id.save_menu).setVisible(FirebaseUtil.isAdmin);
-        enableEditTexts(FirebaseUtil.isAdmin);
-        findViewById(R.id.btnImage).setEnabled(FirebaseUtil.isAdmin);
+        if (FirebaseUtil.isAdmin) {
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            enableEditTexts(true);
+        } else {
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            enableEditTexts(false);
+        }
+//        menu.findItem(R.id.delete_menu).setVisible(FirebaseUtil.isAdmin);
+//        menu.findItem(R.id.save_menu).setVisible(FirebaseUtil.isAdmin);
+//        enableEditTexts(FirebaseUtil.isAdmin);
+//        findViewById(R.id.btnImage).setEnabled(FirebaseUtil.isAdmin);
         return true;
     }
 
@@ -175,6 +189,7 @@ public class DealActivity extends AppCompatActivity {
         if (url != null && !url.isEmpty()) {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             Picasso.get().load(url).resize(width, width * 2 / 3).centerCrop().into(eImageView);
+//            Glide.with(this).load(url).into(eImageView);
         }
     }
 }
