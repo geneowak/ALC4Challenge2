@@ -123,7 +123,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
         private void showImage(String url) {
             if (url != null && !url.isEmpty()) {
-                url = "https://cdn.pixabay.com/photo/2019/07/29/21/15/samburu-4371555_960_720.jpg";
+//                url = "https://cdn.pixabay.com/photo/2019/07/29/21/15/samburu-4371555_960_720.jpg";
                 Picasso.get().load(url).resize(160, 160).centerCrop().into(eImageDeal);
 //                Glide.with(itemView.getContext()).load(url).into(eImageDeal);
             }

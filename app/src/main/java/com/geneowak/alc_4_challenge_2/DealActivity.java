@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
@@ -78,18 +79,17 @@ public class DealActivity extends AppCompatActivity {
             ref.putFile(imageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    while (!ref.getDownloadUrl().isComplete()) ;
-                    String url = ref.getDownloadUrl().getResult().toString();
+                    Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!url.isSuccessful()) ;
+                    Uri download = url.getResult();
 //                    String url = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    String urlString = download.toString();
                     String picName = taskSnapshot.getStorage().getPath();
-                    eDeal.setImageUrl(url);
+                    eDeal.setImageUrl(urlString);
                     eDeal.setImageName(picName);
-                    Log.d("url: ", url);
+                    Log.d("url", urlString);
                     Log.d("Name", picName);
-                    Log.d("Metta: ", taskSnapshot.getMetadata().getPath());
-                    Log.d("Metta: ", taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                    Log.d("Metta: ", ref.getDownloadUrl().getResult().toString());
-                    showImage(url);
+                    showImage(urlString);
                 }
             });
         }
